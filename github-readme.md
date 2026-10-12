@@ -11,16 +11,30 @@ You (Chat Channels)
   │
   ▼
 ┌─────────────────────────────────────────────┐
-│  Hub (Dispatcher)                           │
+│  Hub (Dispatcher + daily driver)            │
 │  Classifies message → 9 categories          │
-│  Routes to optimal agent + model            │
-└────┬────────┬────────┬────────┬─────────────┘
-     │        │        │        │
-     ▼        ▼        ▼        ▼
-  Main      Code    Security   Personal
-  (complex) (code)  (scans)    (separate
-  reasoning  tasks   read-only  workspace)
+│  Answers simple ones, routes the rest       │
+└────────┬───────────────────┬────────────────┘
+         │                   │
+         ▼                   ▼
+       Code              Security
+     (code tasks)      (read-only scans)
+
+  Deep reasoning: separate agent, invoked by hand only —
+  never auto-routed (see "What changed since March")
 ```
+
+## What Changed Since March (October 2026 update)
+
+The swarm has been running daily since this write-up. Seven months of use changed it:
+
+- **Fewer agents, not more.** It peaked at more specialists (a coach, a trader, a personal assistant, a separate "main" agent). Most got folded into the Hub. Each extra agent was one more thing to monitor, and the Hub handled their jobs fine. Today: 3 routed agents plus 1 manual one.
+- **The expensive model came out of automatic routing.** The top reasoning model is now a separate agent I call by hand. Auto-routing to it cost more than it returned; when a problem is genuinely hard, I already know it.
+- **A "smarter" security model got reverted the same night.** I tried a premium preview model as the security agent's primary. A second-opinion review killed it: about 5–7x the cost per token, tighter burst rate limits, and preview models can change silently. The worst part is that **fallbacks fire on errors, not on confidently wrong answers**. The better design is cheap triage on every event, escalating to a strong model only when something looks suspicious.
+- **Alerts got quieter.** Warnings and info now go to a log instead of my phone. Only critical alerts interrupt me. An alert channel that fires constantly gets ignored, which is worse than no alert.
+- **The credit circuit breaker stayed.** It's the one piece that never needed redesign.
+
+**Lesson:** the architecture that survived is the boring one. Cheap default, strong fallback, a human picking when to pay for the best model.
 
 ## Architecture
 
@@ -28,10 +42,10 @@ You (Chat Channels)
 
 | Agent | Role | Model Tier | Notes |
 |-------|------|-----------|-------|
-| Hub | Dispatcher + simple tasks | Free / fast mid-tier | Handles trivial in-house |
-| Main | Complex reasoning | Top reasoning model | Multi-provider fallback |
+| Hub | Dispatcher + simple tasks | Small fast model | 3 fallbacks across 3 providers |
 | Code | Code specialist | Code-specialized model | Restricted filesystem |
-| Security | Watchdog | Strong mid-tier | Read-only, never modifies |
+| Security | Watchdog | Cheap fast model, strong fallback | Read-only, never modifies |
+| Deep reasoning | Hard problems | Top reasoning model | Manual only, not in dispatch |
 
 ### Intelligent Routing
 
@@ -49,7 +63,7 @@ complex  → top reasoning
 hardest  → maximum capability
 ```
 
-Every fallback chain spans all 3 major providers. No single point of failure.
+The dispatcher and security chains each span all 3 major providers; the code chain spans 2. No single provider outage takes the swarm down.
 
 ### Credit Economy (Circuit Breaker)
 
@@ -114,10 +128,18 @@ Routing optimization is the cost control. Most messages hit free/cheap models. E
 ## Design Principles
 
 1. **Route to the cheapest capable model.** Don't waste frontier-model tokens on "what time is it?"
-2. **Every chain covers all providers.** No single point of failure.
+2. **Every chain crosses providers.** No single point of failure.
 3. **Circuit breakers, not budgets.** Credit limits exist to catch bugs, not restrict usage.
 4. **Security agent is read-only.** An agent that can detect AND fix problems is an agent that can cause problems.
 5. **Monitor before you scale.** Add observability before adding complexity.
+
+## Reference Code
+
+The production system is private (it holds keys and personal data). [`examples/router.py`](examples/router.py) is a small, standalone, runnable version of the three core ideas — classify-and-route, cross-provider fallback, and the credit circuit breaker — with no API calls and no dependencies:
+
+```
+python3 examples/router.py
+```
 
 ## Getting Started
 

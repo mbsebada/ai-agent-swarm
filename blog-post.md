@@ -1,5 +1,7 @@
 # I Built a Self-Healing AI Agent Swarm That Runs My Infrastructure
 
+> **Update, October 2026:** the swarm has slimmed down since this was written: 3 routed agents plus a manual deep-reasoning one, and the expensive models came out of automatic routing. See [what changed since March](https://github.com/mbsebada/ai-agent-swarm#what-changed-since-march-october-2026-update) and the [runnable reference code](https://github.com/mbsebada/ai-agent-swarm/blob/master/examples/router.py).
+
 Everyone's excited about connecting Claude to a notes app. I went a different direction.
 
 I built a multi-agent system with 5 specialized AI agents, 3 cloud providers, automatic failover, credit-based routing, and self-healing monitoring. It handles everything from "what's for dinner" to "debug this production issue" -- and it decides which AI model to use for each.
