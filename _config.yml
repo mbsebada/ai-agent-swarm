@@ -1,3 +1,3 @@
 title: AI Agent Swarm
-description: Multi-agent AI platform with intelligent routing, provider failover, and self-healing infrastructure
+description: Notes and a runnable sketch from running a small multi-agent AI setup daily: model routing, provider fallback, and a daily spend cap
 theme: jekyll-theme-minimal

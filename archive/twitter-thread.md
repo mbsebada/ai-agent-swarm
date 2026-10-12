@@ -1,3 +1,5 @@
+> **Archived:** the original March 2026 write-up. No longer accurate — see the [README](https://github.com/mbsebada/ai-agent-swarm#readme) for the current system.
+
 # X Thread Draft
 
 > Hook into the "Claude + Obsidian" conversation. Show what happens when you go way deeper.
@@ -29,7 +31,6 @@ Meet the swarm:
 - **Main** -- my daily driver. Complex reasoning
 - **Code** -- code specialist
 - **Security** -- watchdog. Automated scans, read-only, never modifies files
-- **Personal** -- a separate agent for my partner (outside the swarm)
 
 ---
 

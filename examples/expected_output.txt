@@ -1,0 +1,10 @@
+ trivial -> hub      answered by provider-a/small-fast, cost 1, left 9
+  lookup -> hub      answered by provider-b/small-fast, cost 1, left 8 (failed: provider-a/small-fast)
+     ops -> hub      answered by provider-b/small-fast, cost 1, left 7 (failed: provider-a/small-fast)
+security -> security answered by provider-b/triage, cost 1, left 9
+    code -> code     answered by provider-c/general, cost 3, left 7 (failed: provider-c/code-specialized)
+    code -> code     answered by provider-c/general, cost 3, left 4 (failed: provider-c/code-specialized)
+    code -> code     NO MODEL ANSWERED (skipped (over budget): provider-c/code-specialized; failed: provider-c/general, provider-a/small-fast)
+    code -> code     answered by provider-c/general, cost 3, left 1 (skipped (over budget): provider-c/code-specialized)
+    code -> code     answered by provider-a/small-fast, cost 1, left 0 (skipped (over budget): provider-c/code-specialized, provider-c/general)
+    code -> code     BREAKER OPEN: budget exhausted, answered by provider-free/free-tier (simulated); alert would fire (simulated)

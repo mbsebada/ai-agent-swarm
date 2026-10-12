@@ -1,11 +1,6 @@
----
-layout: default
-title: AI Agent Swarm
----
+> **Archived:** the original March 2026 write-up. No longer accurate — see the [README](https://github.com/mbsebada/ai-agent-swarm#readme) for the current system.
 
 # I Built a Self-Healing AI Agent Swarm That Runs My Infrastructure
-
-> **Update, October 2026:** the swarm has slimmed down since this was written: 3 routed agents plus a manual deep-reasoning one, and the expensive models came out of automatic routing. See [what changed since March](https://github.com/mbsebada/ai-agent-swarm#what-changed-since-march-october-2026-update) and the [runnable reference code](https://github.com/mbsebada/ai-agent-swarm/blob/master/examples/router.py).
 
 Everyone's excited about connecting Claude to a notes app. I went a different direction.
 
@@ -52,11 +47,6 @@ Runs over a dozen automated security checks on a regular schedule:
 - Disk and log usage tracking
 
 Critically: the Security Agent is **read-only**. It detects and reports. It never modifies files. If it finds something critical, it alerts me immediately. Lower-priority warnings get batched.
-
-### Personal Agent
-My partner has their own agent on a separate channel. Completely independent from the swarm -- own personality, own workspace, own context.
-
----
 
 ## The Routing Table
 
@@ -173,5 +163,3 @@ The "Claude + Obsidian" approach is step 0.5. It's a great place to start. But i
 ---
 
 *Happy to share more about the architecture. Reach out if you're building something similar.*
-
-[View on GitHub](https://github.com/mbsebada/ai-agent-swarm)
